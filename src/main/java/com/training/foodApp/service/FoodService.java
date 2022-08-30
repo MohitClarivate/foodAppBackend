@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.training.foodApp.dao.FoodDao;
 import com.training.foodApp.dto.Food;
+import com.training.foodApp.dto.Menu;
 import com.training.foodApp.exception.IdNotFoundException;
 import com.training.foodApp.util.ResponseStructure;
 
@@ -21,6 +22,28 @@ public class FoodService {
 	public Food savefood(Food food) {
 		return fooddao.savefood(food);
 	}
+	
+	//update food by id
+	public ResponseEntity<ResponseStructure<Food>> updateFoodById(Food food, int id) {
+		Food temp = fooddao.getFoodById(id).get();
+		temp.setName(food.getName());
+		temp.setPrice(food.getPrice());
+		temp.setCategory(food.getCategory());
+		temp.setDescription(food.getDescription());
+		temp.setType(food.getType());
+		temp.setAvailability(food.getAvailability());
+		Food temp2 = fooddao.updateFoodById(temp, id);
+        ResponseStructure<Food> structure = new ResponseStructure<Food>();
+        if (temp2 != null) {
+            structure.setMessage("Food Updated Successfully!");
+            structure.setStatus(HttpStatus.OK.value());
+            structure.setT(temp2);
+            return new ResponseEntity<ResponseStructure<Food>>(structure, HttpStatus.OK);
+        } else {
+        	throw new IdNotFoundException();
+        }
+	}
+
 	
 	//find all food
 	public ResponseEntity<ResponseStructure<List<Food>>> findAllFood(){
@@ -45,7 +68,7 @@ public class FoodService {
 		}
 	}
 	
-	//delete branch by id
+	//delete food by id
 	public ResponseEntity<ResponseStructure<Food>> deleteFood(int id) {
 		Food food=fooddao.deleteFood(id);
 		ResponseStructure<Food> structure=new ResponseStructure<Food>();
@@ -62,5 +85,6 @@ public class FoodService {
 //			return new ResponseEntity<ResponseStructure<Food>>(structure, HttpStatus.NOT_FOUND);
 		}
 	}
+
 
 }

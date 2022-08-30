@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.training.foodApp.dto.FoodOrders;
 import com.training.foodApp.dto.User;
 import com.training.foodApp.repository.SaveUserRepository;
 
@@ -16,6 +18,17 @@ public class UserDao {
 	//save user
 	public User saveUser(User user) {
 		return saveuserrepository.save(user);	
+	}
+	
+	//update user by id
+	public User updateUserById(User user, int id) {
+		if (saveuserrepository.findById(id).isEmpty()) {
+			return null;
+		} else {
+	        //FoodOrders order = getFoodOrderById(id).get();
+	        user.setId(id);
+            return saveuserrepository.save(user);
+		}
 	}
 	
 	//find all user

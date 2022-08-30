@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.training.foodApp.dto.Food;
+import com.training.foodApp.dto.Menu;
 import com.training.foodApp.repository.AddFoodRepository;
 
 @Repository
@@ -17,6 +18,17 @@ public class FoodDao {
 	//add food
 	public Food savefood(Food food) {
 		return addfoodrepository.save(food);
+	}
+	
+	//update food by id
+	public Food updateFoodById(Food food, int id) {
+		if (addfoodrepository.findById(id).isEmpty()) {
+			return null;
+		} else {
+	        //FoodOrders order = getFoodOrderById(id).get();
+	        food.setId(id);
+            return addfoodrepository.save(food);
+		}
 	}
 	
 	//find all food

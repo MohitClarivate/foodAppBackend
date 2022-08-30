@@ -15,6 +15,7 @@ public class User {
 	private String email;
 	private String password;
 	private String role;
+	
 	@ManyToOne
 	private Branch branch;
 	
@@ -54,4 +55,5 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
+	
 }

@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.training.foodApp.dto.Menu;
+import com.training.foodApp.dto.User;
 import com.training.foodApp.service.MenuService;
 import com.training.foodApp.util.ResponseStructure;
 
@@ -27,6 +29,12 @@ public class MenuController {
 	@PostMapping("/savemenu")
 	 public Menu savemenu(@RequestBody Menu menu) {
      return service.savemenu(menu);
+	}
+	
+	//update menu by id
+	@PutMapping("/updatemenu/{id}")
+	public ResponseEntity<ResponseStructure<Menu>> updateMenuById(@RequestBody Menu menu, @PathVariable int id) {
+		return service.updateMenuById(menu , id);
 	}
 	
 	//find all menu

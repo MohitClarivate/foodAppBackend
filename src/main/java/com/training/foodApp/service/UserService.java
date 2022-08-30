@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.training.foodApp.dao.BranchDao;
 import com.training.foodApp.dao.UserDao;
+import com.training.foodApp.dto.Food;
+import com.training.foodApp.dto.FoodOrders;
 import com.training.foodApp.dto.User;
 import com.training.foodApp.exception.IdNotFoundException;
 import com.training.foodApp.util.AES;
@@ -38,6 +40,27 @@ public class UserService {
 		}
 
     }
+	
+	//update user by id
+	public ResponseEntity<ResponseStructure<User>> updateUserById(User user, int id) {
+		User temp = userdao.getUserById(id).get();
+		temp.setName(user.getName());
+		temp.setRole(user.getRole());
+		temp.setBranch(user.getBranch());
+		temp.setEmail(user.getEmail());
+		temp.setPassword(user.getPassword());
+		temp.setPassword(aes.encrypt(user.getPassword(),"encryptkey"));
+	       User temp2 = userdao.updateUserById(temp, id);
+	        ResponseStructure<User> structure = new ResponseStructure<User>();
+	        if (temp2 != null) {
+	            structure.setMessage("User Updated Successfully!");
+	            structure.setStatus(HttpStatus.OK.value());
+	            structure.setT(temp2);
+	            return new ResponseEntity<ResponseStructure<User>>(structure, HttpStatus.OK);
+	        } else {
+	        	throw new IdNotFoundException();
+	        }
+	}
 	
 	//find all user
 	public ResponseEntity<ResponseStructure<List<User>>> findAllUser() {
@@ -111,7 +134,6 @@ public class UserService {
 //			return new ResponseEntity<ResponseStructure<User>>(structure, HttpStatus.NOT_FOUND);
 		}
 	}
-
 
 
 }

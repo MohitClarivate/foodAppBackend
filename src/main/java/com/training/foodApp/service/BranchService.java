@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.training.foodApp.dao.BranchDao;
 import com.training.foodApp.dto.Branch;
+import com.training.foodApp.dto.User;
 import com.training.foodApp.exception.IdNotFoundException;
 import com.training.foodApp.util.ResponseStructure;
 
@@ -22,6 +23,25 @@ public class BranchService {
 	public Branch saveBranch(Branch branch) {
         return branchdao.saveBranch(branch);
     }
+	
+	//update branch by id
+	public ResponseEntity<ResponseStructure<Branch>> updateBranchById(Branch branch, int id) {
+		Branch temp = branchdao.getBranchById(id).get();
+		temp.setName(branch.getName());
+		temp.setEmail(branch.getEmail());
+		temp.setCity(branch.getCity());
+		temp.setPhone(branch.getPhone());
+		Branch temp2 = branchdao.updateBranchById(temp, id);
+        ResponseStructure<Branch> structure = new ResponseStructure<Branch>();
+        if (temp2 != null) {
+            structure.setMessage("Branch Updated Successfully!");
+            structure.setStatus(HttpStatus.OK.value());
+            structure.setT(temp2);
+            return new ResponseEntity<ResponseStructure<Branch>>(structure, HttpStatus.OK);
+        } else {
+        	throw new IdNotFoundException();
+        }
+	}
 	
 	//find all branch
 	public ResponseEntity<ResponseStructure<List<Branch>>> findAllBranch(){

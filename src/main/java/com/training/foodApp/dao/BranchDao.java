@@ -18,6 +18,16 @@ public class BranchDao {
 		return savebranchrepository.save(branch);
 	}
 	
+	//update branch by id
+	public Branch updateBranchById(Branch branch, int id) {
+		if(savebranchrepository.findById(id).isEmpty()) {
+			return null;
+		}else {
+			branch.setId(id);
+			return savebranchrepository.save(branch);
+		}
+	}
+	
 	//find all branch
 	public List<Branch> findAllBranch(){
 		return savebranchrepository.findAll();

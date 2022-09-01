@@ -29,7 +29,7 @@ public class MenuService {
 		Menu temp = menudao.getMenuById(id).get();
 		temp.setName(menu.getName());
 		temp.setCategory(menu.getCategory());
-		temp.setFoods(temp.getFoods());
+		temp.setFoods(menu.getFoods());
 		temp.setBranch(menu.getBranch());
 		Menu temp2 = menudao.updateMenuById(temp, id);
         ResponseStructure<Menu> structure = new ResponseStructure<Menu>();

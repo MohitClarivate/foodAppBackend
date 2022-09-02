@@ -83,7 +83,40 @@ public class FoodOrderService {
         }
     }
 	
-	//get bill by id
+	//show bill by id
+	public ResponseEntity<ResponseStructure<String>> showBillBYId(int id) {
+		Optional<FoodOrders> foodOrder = foodordersdao.getFoodOrderById(id);
+        int gross_amount = foodOrder.get().getPrice();
+        double gst = gross_amount * 0.12;
+        double service_charge = gross_amount * 0.05;
+        double net_amount = gross_amount + gst + service_charge;
+        
+        StringBuilder stringBuilder = new StringBuilder();
+        int temp = 1;
+        for(Food i:foodOrder.get().getFoods()) {
+            stringBuilder.append(temp +  "\t\t" + i.getName() + "\t\t" + i.getPrice() + "\n");
+            temp++;
+        }
+        ResponseStructure<String> structure = new ResponseStructure<String>();
+        structure.setMessage("FoodOrder found!");
+        structure.setStatus(HttpStatus.OK.value());
+        structure.setT("Bill generated sucessfully!"+"Order Id: " + id + "\n" +
+                //"Date: " + foodOrder.get().getDate() + "\n" +
+                "Branch: " + foodOrder.get().getBranch().getName() + ", " + foodOrder.get().getBranch().getCity() + ", " + foodOrder.get().getBranch().getPhone() + "\n" +
+                "Name: " + foodOrder.get().getName() + "\n\n" +
+                "Sr no." + "\t" + "Food Name" + "\t" + "Price\n" +
+                "----------------------------------------\n" +
+                stringBuilder +
+                "----------------------------------------\n\n" +
+                "Gross Amount: " + gross_amount + "\n" +
+                "GST @12%: " + gst + "\n" +
+                "Service Charge @5%: " + service_charge + "\n" +
+                "Net Payable Amount: (" + gross_amount + "+" + gst + "+" + service_charge + ") = " + net_amount + "\n\n\n\n" +
+                "Thank you!\n"+"Team Food App");
+        return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.OK);
+	}
+	
+	//get bill by id and send to email
 	public ResponseEntity<ResponseStructure<String>> getbillbyid(int id, String email) {
         Optional<FoodOrders> foodOrder = foodordersdao.getFoodOrderById(id);
         int gross_amount = foodOrder.get().getPrice();
@@ -128,7 +161,7 @@ public class FoodOrderService {
         return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.OK);
 }
 	
-	//get bill by phone
+	//get bill by phone and send to email
 	public ResponseEntity<ResponseStructure<String>> getbillbyphone(int phone, String email){
 		Optional<FoodOrders> foodOrder = foodordersdao.findFoodOrderByPhone(phone);
 		int id = foodOrder.get().getId();
@@ -192,5 +225,7 @@ public class FoodOrderService {
 //			return new ResponseEntity<ResponseStructure<FoodOrders>>(structure, HttpStatus.NOT_FOUND);
 		}
 	}
+
+
 
 }

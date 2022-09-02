@@ -48,6 +48,12 @@ public class FoodOrderController {
 		return service.updateFoodOrderById(foodorder , id);
 	}
 	
+	//show bill by id
+	@GetMapping("/showbillbyid/{id}")
+	public ResponseEntity<ResponseStructure<String>> showBillBYId(@PathVariable int id){
+		return service.showBillBYId(id);
+	}
+	
 	//get Bill by id
 	@GetMapping("/showbillbyemail")
 	public ResponseEntity<ResponseStructure<String>> getbill(@RequestParam int id, @RequestParam String email){

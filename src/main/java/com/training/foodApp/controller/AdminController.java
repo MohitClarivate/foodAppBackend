@@ -21,5 +21,11 @@ public class AdminController {
 	public List<User> getAllBM() {
 	    return service.getAllBM();
 	}
+	
+	//find all staff
+	@GetMapping("/findallStaff")
+	public List<User> getStaff() {
+		return service.getStaff();
+	}
 
 }

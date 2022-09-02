@@ -19,4 +19,9 @@ public class AdminDao {
 		return adminrepository.findAll();
 	}
 
+	//get all staff
+	public List<User> getAllStaff() {
+		return adminrepository.findAll();
+	}
+
 }

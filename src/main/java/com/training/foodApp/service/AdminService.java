@@ -26,5 +26,17 @@ public class AdminService {
         }
         return branchManagers;
     }
+	
+	// get all staff
+	public List<User> getStaff() {
+		List<User> staff = admindao.getAllStaff();
+        ListIterator<User> listIterator = staff.listIterator();
+        while (listIterator.hasNext()) {
+            if (!listIterator.next().getRole().contains("staff")) {
+                listIterator.remove();
+            }
+        }
+        return staff;
+	}
 
 }

@@ -42,7 +42,7 @@ public class AES {
     return null;
   }
 
-  public static String decrypt(final String strToDecrypt, final String secret) {
+  public String decrypt(final String strToDecrypt, final String secret) {
     try {
       setKey(secret);
       Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");

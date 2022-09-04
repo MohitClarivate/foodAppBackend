@@ -1,5 +1,9 @@
 package com.training.foodApp.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.training.foodApp.dao.FoodDao;
 import com.training.foodApp.dao.FoodOrdersDao;
+import com.training.foodApp.dto.Branch;
 import com.training.foodApp.dto.Food;
 import com.training.foodApp.dto.FoodOrders;
 import com.training.foodApp.exception.IdNotFoundException;
@@ -32,11 +37,24 @@ public class FoodOrderService {
 	//save food order
 	public FoodOrders foodOrder(FoodOrders foodorder) {
 		List<Food> foodlist=foodorder.getFoods();
+		
+	    String strTimeFormat = "hh:mm";
+	    DateFormat timeFormat = new SimpleDateFormat(strTimeFormat);
+	    Date time = new Date();
+	    String formattedtime= timeFormat.format(time);
+	    
+	    String strDateFormat = "dd/MM/yyyy";
+	    DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
+	    Date date = new Date();
+	    String formatteddate= dateFormat.format(date);
+	    
 		int price=0;
 		for(Food i : foodlist) {
 			Optional<Food> temp = fooddao.getFoodById(i.getId());
 			price += temp.get().getPrice();
 		}
+		foodorder.setDate(formatteddate);
+		foodorder.setTime(formattedtime);
 		foodorder.setPrice(price);
 		foodorder.setQuantity(foodlist.size());
 		return foodordersdao.foodOrder(foodorder);
@@ -69,14 +87,18 @@ public class FoodOrderService {
             Optional<Food> food = fooddao.getFoodById(i.getId());
                 price += food.get().getPrice();
         }
+	    
         foodOrder.setQuantity(foods.size());
         foodOrder.setPrice(price);
-        FoodOrders temp = foodordersdao.updateFoodOrderById(foodOrder, id);
+        foodOrder.setDate(foodordersdao.getFoodOrderById(id).get().getDate());
+        foodOrder.setTime(foodordersdao.getFoodOrderById(id).get().getTime());
+
+        FoodOrders temp2 = foodordersdao.updateFoodOrderById(foodOrder, id); 
         ResponseStructure<FoodOrders> structure = new ResponseStructure<FoodOrders>();
-        if (temp != null) {
+        if (temp2 != null) {
             structure.setMessage("FoodOrder Updated Successfully!");
             structure.setStatus(HttpStatus.OK.value());
-            structure.setT(temp);
+            structure.setT(temp2);
             return new ResponseEntity<ResponseStructure<FoodOrders>>(structure, HttpStatus.OK);
         } else {
         	throw new IdNotFoundException();

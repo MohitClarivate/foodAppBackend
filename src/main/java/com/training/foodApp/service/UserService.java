@@ -106,6 +106,10 @@ public class UserService {
 	//get user by id 
 	public ResponseEntity<ResponseStructure<User>> getUserById(int id) {
 		Optional<User> optional=userdao.getUserById(id);
+		
+		User temp=userdao.getUserById(id).get();
+		temp.setPassword(aes.decrypt(temp.getPassword(),"encryptkey"));
+		
 		if(optional.isEmpty()) {
 			throw new IdNotFoundException();
 		}else {

@@ -17,10 +17,11 @@ public class FoodOrders {
 	
 	private String name;
 	private long phone;
-	private String item;
 	private int quantity;
 	private int price;
 	private String status;
+	private String date;
+	private String time;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Food> foods;
@@ -40,12 +41,6 @@ public class FoodOrders {
 	public void setPhone(long phone) {
 		this.phone = phone;
 	}
-	public String getItem() {
-		return item;
-	}
-	public void setItem(String item) {
-		this.item = item;
-	}
 	public int getQuantity() {
 		return quantity;
 	}
@@ -63,6 +58,18 @@ public class FoodOrders {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
 	}
 	public Branch getBranch() {
 		return branch;

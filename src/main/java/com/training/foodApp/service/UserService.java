@@ -13,7 +13,8 @@ import com.training.foodApp.dao.UserDao;
 import com.training.foodApp.dto.Food;
 import com.training.foodApp.dto.FoodOrders;
 import com.training.foodApp.dto.User;
-import com.training.foodApp.exception.IdNotFoundException;
+import com.training.foodApp.exception.AlreadyExist;
+import com.training.foodApp.exception.UserNotFound;
 import com.training.foodApp.util.AES;
 import com.training.foodApp.util.ResponseStructure;
 
@@ -30,9 +31,12 @@ public class UserService {
 	
 	//add user
 	public User saveUser(User user) {
-		if(branchdao.getBranchById(user.getBranch().getId()).isEmpty())
+		User user2 = userdao.findUserByEmail(user.getEmail());
+		if(user2!=null) {
+			throw new AlreadyExist();
+		}else if(branchdao.getBranchById(user.getBranch().getId()).isEmpty())
 		{
-			throw new IdNotFoundException();
+			throw new UserNotFound();
 		}
 		else {
 			user.setPassword(aes.encrypt(user.getPassword(),"encryptkey"));
@@ -58,7 +62,7 @@ public class UserService {
 	            structure.setT(temp2);
 	            return new ResponseEntity<ResponseStructure<User>>(structure, HttpStatus.OK);
 	        } else {
-	        	throw new IdNotFoundException();
+	        	throw new UserNotFound();
 	        }
 	}
 	
@@ -89,10 +93,10 @@ public class UserService {
 	public ResponseEntity<ResponseStructure<User>> loginUser(String email, String password) {
 		User user = userdao.findUserByEmail(email);
 		if(user==null) {
-			throw new IdNotFoundException();
+			throw new UserNotFound();
 		}
 		else if(!user.getPassword().contains(aes.encrypt(password, "encryptkey"))){
-			throw new IdNotFoundException();
+			throw new UserNotFound();
 		}else {
 			ResponseStructure<User> structure=new ResponseStructure<User>();
 			structure.setMessage("User Login sucessfully");
@@ -111,7 +115,7 @@ public class UserService {
 		temp.setPassword(aes.decrypt(temp.getPassword(),"encryptkey"));
 		
 		if(optional.isEmpty()) {
-			throw new IdNotFoundException();
+			throw new UserNotFound();
 		}else {
 			ResponseStructure<User> structure=new ResponseStructure<User>();
 			structure.setMessage("User Found sucessfully");
@@ -131,7 +135,7 @@ public class UserService {
 			structure.setT(user);
 			return new ResponseEntity<ResponseStructure<User>>(structure, HttpStatus.OK);
 		}else {
-			throw new IdNotFoundException();
+			throw new UserNotFound();
 //			structure.setMessage("invalid id");
 //			structure.setStatus(HttpStatus.NOT_FOUND.value());
 //			structure.setT(null);

@@ -20,4 +20,33 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 
 		return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(UserNotFound.class)
+	public ResponseEntity<ResponseStructure<String>> userNotFound(UserNotFound exception) {
+		ResponseStructure<String> structure = new ResponseStructure<String>();
+		structure.setMessage("Invalid User");
+		structure.setStatus(HttpStatus.NOT_FOUND.value());
+		structure.setT("Invalid User");
+
+		return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(MenuNotFound.class)
+	public ResponseEntity<ResponseStructure<String>> menuNotFound(MenuNotFound exception) {
+		ResponseStructure<String> structure = new ResponseStructure<String>();
+		structure.setMessage("Invalid Menu");
+		structure.setStatus(HttpStatus.NOT_FOUND.value());
+		structure.setT("Invalid Menu");
+
+		return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.NOT_FOUND);
+	}
+	@ExceptionHandler(AlreadyExist.class)
+	public ResponseEntity<ResponseStructure<String>> alreadyExist(AlreadyExist exception) {
+		ResponseStructure<String> structure = new ResponseStructure<String>();
+		structure.setMessage("Email already exist");
+		structure.setStatus(HttpStatus.NOT_FOUND.value());
+		structure.setT("Email already exist");
+
+		return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.NOT_FOUND);
+	}
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.training.foodApp.dao.MenuDao;
 import com.training.foodApp.dto.Menu;
 import com.training.foodApp.dto.User;
-import com.training.foodApp.exception.IdNotFoundException;
+import com.training.foodApp.exception.MenuNotFound;
 import com.training.foodApp.util.ResponseStructure;
 
 @Service
@@ -39,7 +39,7 @@ public class MenuService {
             structure.setT(temp2);
             return new ResponseEntity<ResponseStructure<Menu>>(structure, HttpStatus.OK);
         } else {
-        	throw new IdNotFoundException();
+        	throw new MenuNotFound();
         }
 	}
 	
@@ -56,7 +56,7 @@ public class MenuService {
 	public ResponseEntity<ResponseStructure<Menu>> getMenuById(int id) {
 		Optional<Menu> optional=menudao.getMenuById(id);
 		if(optional.isEmpty()) {
-			throw new IdNotFoundException();
+			throw new MenuNotFound();
 		}else {
 			ResponseStructure<Menu> structure=new ResponseStructure<Menu>();
 			structure.setMessage("Menu Found sucessfully");
@@ -76,7 +76,7 @@ public class MenuService {
 			structure.setT(menu);
 			return new ResponseEntity<ResponseStructure<Menu>>(structure, HttpStatus.OK);
 		}else {
-			throw new IdNotFoundException();
+			throw new MenuNotFound();
 //			structure.setMessage("invalid id");
 //			structure.setStatus(HttpStatus.NOT_FOUND.value());
 //			structure.setT(null);
